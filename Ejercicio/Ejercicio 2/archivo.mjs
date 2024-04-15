@@ -1,9 +1,9 @@
 
-import fs from 'fs/promises'
+import fs from 'node:fs/promises'
 import datos from './informacionDelSiste.mjs'
 
 //const datos = 'Estos son algunos datos para escribir en el archivo.';
-const nombreArchivo = '.\miarchivo.txt';
+const nombreArchivo = './Ejercicio/miarchivo.txt';
 
 
 //asincrona
