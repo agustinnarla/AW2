@@ -3,7 +3,7 @@ import http from 'node:http'
 
 //Identificar las rutas 
 //Mandar un post solo se puede de un formulario
- 
+
 const servidor = http.createServer((peticion, respuesta) =>{
 
     console.log(peticion);
