@@ -1,7 +1,7 @@
 import http from 'node:http'
 import path from 'node:path'
 import fsp from 'node:fs/promises'
-import fs from 'node:fs'
+
 
 const publica = 'publica'
 
@@ -10,13 +10,13 @@ async function index(peticion,respuesta){
     try{
         const ruta = path.join(publica,'index.html')
         const archivo = await fsp.readFile(ruta)
-
+        //respuesta.setHeader('Content-Type', 'text/html; charset=utf-8')
         respuesta.statusCode = 200;
         respuesta.end(archivo)
     }
     catch (err){
-        respuesta.statusCode = 400;
-        respuesta.end("Error loo",err)
+        respuesta.statusCode = 500;
+        respuesta.end("Error loco",err)
     }
 }
 
@@ -42,8 +42,9 @@ async function recursos(peticion,respuesta) {
         respuesta.end(archivo)
     }
     catch(err){
-        respuesta.statusCode = 400;
+        respuesta.statusCode = 404;
         respuesta.end("no encontrado",err)
     }
 }
+
 servidor.listen(3000)

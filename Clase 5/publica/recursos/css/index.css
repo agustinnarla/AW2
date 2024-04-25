@@ -1,10 +1,6 @@
-title{
-    color: aliceblue;
+h1{
+    color: blueviolet;
     size: 20px;
     margin-top: 200px;
 }
 
-*{
-    padding: 20%;
-    text-align: center;
-}
