@@ -4,6 +4,8 @@ import fsp from 'node:fs/promises'
 
 
 const publica = 'publica'
+const jsonRuta = 'datos'
+const puerto = 3000
 
 async function index(peticion,respuesta){
 
@@ -16,7 +18,7 @@ async function index(peticion,respuesta){
     }
     catch (err){
         respuesta.statusCode = 500;
-        respuesta.end("Error loco",err)
+        respuesta.end("Error loco")
     }
 }
 
@@ -26,6 +28,9 @@ const servidor = http.createServer((peticion,respuesta) => {
         if(peticion.url === 'index.html' || peticion.url === "/"){
             index(peticion,respuesta)
         }
+        else if (peticion.url === '/productos'){
+            json(respuesta)
+        }   
         else {
             recursos(peticion,respuesta)
         }
@@ -43,8 +48,23 @@ async function recursos(peticion,respuesta) {
     }
     catch(err){
         respuesta.statusCode = 404;
-        respuesta.end("no encontrado",err)
+        respuesta.end("no encontrado")
     }
 }
 
-servidor.listen(3000)
+async function json(peticion,respuesta) {
+    try{
+        const ruta = path.join(jsonRuta,'producto.json')
+        const archivo = await fsp.readFile(ruta)
+        respuesta.statusCode = 200
+        respuesta.end(archivo)
+
+    }catch{
+        respuesta.statusCode = 404
+        respuesta.end('error')
+    }
+}
+
+servidor.listen( puerto,() =>{
+ console.log(`El servidor se abrio en http://localhost:${puerto}`);
+})
