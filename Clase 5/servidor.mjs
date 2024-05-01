@@ -54,7 +54,7 @@ const servidor = http.createServer((peticion,respuesta) => {
                 datos += pedacitos;    
             })
             //error
-            peticion.on('error',(error) =>{
+            peticion.on('error',() =>{
                 respuesta.statusCode = 404
                 respuesta.end("Erro en el formulario")
             })
