@@ -1,0 +1,28 @@
+{
+  "productos": [
+    {
+      "id": 1,
+      "nombre": "Camiseta de algodón",
+      "precio": 15.99,
+      "descripcion": "Camiseta básica de algodón en varios colores",
+      "categoria": "Ropa",
+      "disponibilidad": true
+    },
+    {
+      "id": 2,
+      "nombre": "Portátil HP",
+      "precio": 899.99,
+      "descripcion": "Portátil con pantalla de 15 pulgadas, procesador Intel Core i5 y 8GB de RAM",
+      "categoria": "Electrónica",
+      "disponibilidad": true
+    },
+    {
+      "id": 3,
+      "nombre": "Libro: El señor de los anillos",
+      "precio": 24.50,
+      "descripcion": "Edición de lujo de la famosa saga de J.R.R. Tolkien",
+      "categoria": "Libros",
+      "disponibilidad": false
+    }
+  ]
+}
