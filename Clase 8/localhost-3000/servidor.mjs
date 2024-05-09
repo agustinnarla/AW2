@@ -1,52 +1,71 @@
-import http from 'node:http'
-import fsp from 'node:fs/promises'
-import  path from 'node:path'
-
+import {createServer} from 'node:http';
+import {readFile} from 'node:fs/promises'
+import {join, parse} from 'node:path'
+import { match } from 'node:assert';
 const puerto = 3000
 const rutaApi = 'api/v1'
 
-let productos
-
-const leerArchivo = async () =>{
+let productosV1;
+// Funciones
+const leerArchivoJSON = async ()=>{
     try{
-        const ruta = path.join( rutaApi, 'productos.json')
-        const datos = await fsp.readFile(ruta,'utf-8')
-        productos = JSON.parse(datos)
-        console.log(productos)
-
-        //find()
-    }catch (error){
-        console.log(error)
+        const ruta = join(rutaApi,'productos.json')
+        const datos = await readFile(ruta,'utf-8')
+        console.log(datos)
+        productosV1 = JSON.parse(datos)
+    }catch(error){
+        console.error(error)
     }
 }
+leerArchivoJSON();
 
-leerArchivo()
 
-const servidor = http.createServer((peticion,respuesta) =>{
+const servidor = createServer((peticion, respuesta)=>{
+    // respuesta.end(peticion.url)
+    const metodo = peticion.method;
+    const rutaPeticion = peticion.url;
 
-    const rutaPeticion = peticion.url
+    // Implementamos las rutas GET
+    if(metodo === 'GET'){
 
-    if(peticion.method === 'GET'){
-        const url = new URL('http://' + peticion.headers.host + rutaPeticion)
-        const ruta = parse(rutaPeticion)
-        console.log(url,ruta)
-        console.log(peticion.headers.host)
+        // const url = new URL('http://' + peticion.headers.host + rutaPeticion) 
+        
         if(rutaPeticion === '/productos'){
-            if(productos){
-                respuesta.statusCode = 200
+            //Pregunta si cargue el arhivo json
+            if(productosV1){
                 respuesta.setHeader('Content-Type','application/json')
-                respuesta.end(JSON.stringify(productos))
+                respuesta.statusCode = 200
+                respuesta.end(JSON.stringify(productosV1))
+            }else{
+                respuesta.statusCode = 404
+                respuesta.end('Contenido no encontrado')
+            }
+        }
+        //encontrar una parte de la ruta
+        else if(rutaPeticion.match('/productos')){
+            const id = parse(rutaPeticion).base; 
+            // console.log(id)
+            //find
+            const producto =  productosV1.productos.find((producto)=>{
+                return Number(producto.id) === Number(id)
+            })
+            if(producto){
+
+                // console.log(producto)
+                const respuestaJson = {
+                    producto: [producto]
+                }
+    
+                respuesta.end(JSON.stringify(respuestaJson))
             }
             else{
-                respuesta.statusCode = 404;
-                console.error("Error en el servidor")
-
+                respuesta.end('Error')
             }
         }
     }
-})
+});
 
 
 servidor.listen(puerto, () => {
-    console.log(`Se ha creado el servidor en la ruta http://localhost:${puerto}`);
+    console.log(`Se ha creado el servidor en la ruta http://localhost:${puerto}/productos`);
 });
