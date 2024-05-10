@@ -83,14 +83,14 @@ const servidor = createServer((peticion, respuesta)=>{
                 respuesta.setHeader('Content-type','application/json')
                 const nuevoProducto = JSON.parse(datos)
                 productosV1.producto.push(nuevoProducto)       
-                await writeFile(rutaJson,JSON.stringify(datos)) 
+                await writeFile(rutaJson,JSON.stringify(productosV1)) 
                 respuesta.statusCode = 200  
-                respuesta.end(datos)
+                respuesta.end(datos)        
             }
             catch(error){
                 respuesta.statusCode = 201
                 respuesta.end(error)
-            }
+            }       
         })
 
     }   
