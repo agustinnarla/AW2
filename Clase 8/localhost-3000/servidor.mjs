@@ -65,33 +65,40 @@ const servidor = createServer((peticion, respuesta)=>{
             }
         }
     }
+    //Crear un nuevo recurso
     else if (metodo === 'POST'){
-        //USUARIO NOS ENVIA NUEVOS DATOS, REGISTRAR EN EL JSON
-        let datos = ''
-        peticion.on('data', (pedacito) =>{
-            datos += pedacito
-        })
-        peticion.on('error',(err) =>{
-            console.error(err)      
-            respuesta.setHeader('Content-type','text/plain')
-            respuesta.statusCode = 500
-            respuesta.end('Error')
-        })
-        peticion.on('end', async()=>{
-            try{
-
-                respuesta.setHeader('Content-type','application/json')
-                const nuevoProducto = JSON.parse(datos)
-                productosV1.producto.push(nuevoProducto)       
-                await writeFile(rutaJson,JSON.stringify(productosV1)) 
-                respuesta.statusCode = 200  
-                respuesta.end(datos)        
-            }
-            catch(error){
-                respuesta.statusCode = 201
-                respuesta.end(error)
-            }       
-        })
+        if(peticion.url === '/productos') {
+            //USUARIO NOS ENVIA NUEVOS DATOS, REGISTRAR EN EL JSON
+            let datos = ''
+            peticion.on('data', (pedacito) =>{
+                datos += pedacito
+            })
+            peticion.on('error',(err) =>{
+                console.error(err)      
+                respuesta.setHeader('Content-type','text/plain')
+                respuesta.statusCode = 500
+                respuesta.end('Error')
+            })
+            peticion.on('end', async()=>{
+                try{
+    
+                    respuesta.setHeader('Content-type','application/json')
+                    const nuevoProducto = JSON.parse(datos)
+                    //metodo de arreglo, agregar un elemento al final   
+                    productosV1.producto.push(nuevoProducto)       
+                    await writeFile(rutaJson,JSON.stringify(productosV1)) 
+                    respuesta.statusCode = 200  
+                    respuesta.end(datos)        
+                }
+                catch(error){
+                    respuesta.statusCode = 201
+                    respuesta.end(error)    
+                }       
+            })
+        }
+        else {
+            respuesta.end("Error en la ruta")
+        }
 
     }   
     else {
@@ -106,3 +113,4 @@ const servidor = createServer((peticion, respuesta)=>{
 servidor.listen(puerto, () => {
     console.log(`Se ha creado el servidor en la ruta http://localhost:${puerto}/productos`);
 });
+
