@@ -1,5 +1,5 @@
 import pg from 'pg'
-const {Pool} = pg 
+
 
 export const pool = new pg.Pool({
     host: "localhost",
