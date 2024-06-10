@@ -2,7 +2,7 @@ import pg from 'pg'
 
 
 export const pool = new pg.Pool({
-    host: "localhost",
+    host: "192.169.0.86",
     user: "root",
     password: "pass",
     database: "tienda",

@@ -6,6 +6,7 @@ import ruta from './ruta/ruta.mjs'
 const app = express()
 
 app.use('/',ruta)
+app.use(express.urlencoded({extended:true}))
 app.use(express.json())
 
 const PUERTO = process.env.PUERTO || 3000
